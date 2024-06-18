@@ -1,0 +1,14 @@
+myhosts:
+  hosts:
+    v0:
+      anible_host: 100.76.189.94
+      ansible_user: sabsare
+      ansible_become_user: root
+
+vm:
+  hosts:
+    debian:
+      ansible_host: localhost 
+      ansible_port: 2222
+      asible_user: root
+      ansible_become_user: root

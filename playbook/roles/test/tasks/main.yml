@@ -1,0 +1,43 @@
+---
+- name: Create user brickdev
+  ansible.builtin.user:
+    name: brickdev
+    create_home: true
+    shell: /bin/bash
+    password: "{{ 'pass' | password_hash('sha512', 'mysecretsalt') }}"
+
+- name: Create user cloudru
+  ansible.builtin.user:
+    name: cloudru
+    create_home: true
+    shell: /bin/bash
+    password: "{{ 'pass' | password_hash('sha512', 'mysecretsalt') }}"
+
+- name: Create ssh dir
+  ansible.builtin.file:
+    path: "/home/cloudru/.ssh"
+    state: directory
+    mode: "0700"
+
+- name: Enable pub key auth via ssh
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: '^(.*)PubkeyAuthentication(.*)$'
+    line: 'PubkeyAuthentication yes'
+
+- name: Disable root auth via ssh
+  ansible.builtin.lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: '^(.*)PermitRootLogin(.*)$'
+    line: 'PermitRootLogin no'
+
+- name: Copy ssh key for cloudru
+  ansible.builtin.authorized_key:
+    user: cloudru
+    state: present
+    key: '{{ sha_key_pub }}'
+
+- name: Reload sshd
+  ansible.builtin.systemd:
+    name: sshd
+    state: reloaded

@@ -1,0 +1,22 @@
+services:
+  webapp:
+    image: node-app:latest
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    environment:
+      - AUTHOR=sabsare
+      - UUID={{.Task.Slot}}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/hostname"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+
+#https://docs.docker.com/reference/cli/docker/service/create/#create-services-using-templates

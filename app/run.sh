@@ -1,0 +1,1 @@
+docker stack deploy my-stack -c docker-compose.yml
