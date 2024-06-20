@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:alpine
 WORKDIR /app
 # У этого приложения нет зависимостей, но я мог бы написать его например при помощи враппера 'express'
 COPY package*.json ./ 
